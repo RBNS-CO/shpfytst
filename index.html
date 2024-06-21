@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                type: 'GET',
+                url: 'https://rayvishop.com/cart.json',
+                dataType: 'jsonp',
+                success: function(data) { 
+                    var item_count = data['item_count'];
+
+                    // If there are items in cart
+                    if(item_count > 0) {
+                        // Display total count
+                        $('#Bag').append('<div class="cart_count">'+ item_count +'</div>');
+
+                        for(var i=0; i < data['items'].length; i++){
+                            var product_title = data['items'][i]['title'];
+                            var quantity = data['items'][i]['quantity'];
+                            var line_price = data['items'][i]['line_price']/100;
+                            var url = data['items'][i]['url'];
+                            var image_url = data['items'][i]['image'];
+
+                            $('#Bag').append('<li class="cart_product"><a href="'+ 'https://rayvishop.com' + url +'"><div class="thumb"><img src="'+ image_url +'"/></div><div class="product_description">'+ product_title +'<br/>Qty - '+ quantity +' <br/>$'+ line_price.toFixed(2) +'</div></a></li>');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="Bag">
+        <!-- Cart items will be appended here -->
+    </div>
+</body>
+</html>
